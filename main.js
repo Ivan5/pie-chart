@@ -47,6 +47,16 @@ function drawPie() {
     startAngle = endAngle;
     endAngle = endAngle + percentArray[i] * Math.PI;
     drawSlice(context, 300, 200, 150, startAngle, endAngle, colorArray[i]);
+
+    drawSliceText(
+      context,
+      300,
+      200,
+      150,
+      startAngle,
+      endAngle,
+      percentArray[i] * 50
+    );
   }
 }
 
@@ -61,8 +71,36 @@ function drawSlice(
 ) {
   ctx.fillStyle = color;
   ctx.beginPath();
-  ctx.moveTo(sliceCneterX, sliceCenterY);
-  ctx.arc(sliceCneterX, sliceCenterY, radius, startAngle, endAngle);
+
+  let medianAngle = (startAngle + endAngle) / 2;
+  xOffset = Math.cos(medianAngle) * 30;
+  yOffset = Math.sin(medianAngle) * 30;
+
+  ctx.moveTo(sliceCneterX + xOffset, sliceCenterY + yOffset);
+  ctx.arc(
+    sliceCneterX + xOffset,
+    sliceCenterY + yOffset,
+    radius,
+    startAngle,
+    endAngle
+  );
   ctx.closePath();
   ctx.fill();
+}
+
+function drawSliceText(
+  ctx,
+  sliceCenterX,
+  sliceCenterY,
+  radius,
+  startAngle,
+  endAngle,
+  percentText
+) {
+  let textX = sliceCenterX + Math.cos((startAngle + endAngle) / 2) * radius;
+  let textY = sliceCenterX + Math.sin((startAngle + endAngle) / 2) * radius;
+
+  ctx.fillStyle = "black";
+  ctx.font = "24px Calibri";
+  ctx.fillText(percentText, textX, textY);
 }
